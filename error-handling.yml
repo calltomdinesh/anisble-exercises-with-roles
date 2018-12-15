@@ -1,0 +1,74 @@
+# By default if any task fails on a server, asnible removes the server from
+# the list and continue executing playbook on the remaining app_servers
+# if we want to ansinle to stop playbook execution on all the server if
+#task fails on any server then we have to use "any_errors_fatal: True" optional
+
+-
+  name: Deploy a web application
+  hosts: app_servers
+  any_errors_fatal: True
+  vars:
+    db_name: employee_db
+    db_user: db_user
+    db_password: Passw0rd
+
+# To make Ansible ignore errors even if a particular task fails
+# Use "ignore_errors: yes" optional
+
+-
+  name: Deploy a web application
+  hosts: app_servers
+  any_errors_fatal: true
+  vars:
+    db_name: employee_db
+    db_user: db_user
+    db_password: Passw0rd
+  tasks:
+
+
+    - name: Install MySQL database
+      apt:
+        name: "{{ item }}"
+        state:  installed
+      with_items:
+       - mysql-server
+       - mysql-client
+
+
+    - name: "Send notification email"
+      mail:
+        to: devops@corp.com
+        subject: MySQL database Deployed!
+        body: MySQL database Deployed!
+      ignore_errors: yes
+
+      # To fail a task in the Playbook
+
+      name: Deploy a web application
+      hosts: app_servers
+      any_errors_fatal: true
+
+      tasks:
+
+
+        - name: Install MySQL database
+          apt:
+            name: "{{ item }}"
+            state:  installed
+          with_items:
+           - mysql-server
+           - mysql-client
+
+
+        - name: "Send notification email"
+          mail:
+            to: devops@corp.com
+            subject: MySQL database Deployed!
+            body: MySQL database Deployed!
+          ignore_errors: yes
+
+        # Failing a task using failed_when
+        - name: fail a task
+          command: /var/log/server.log
+          register: command_output
+          failed_when: "'ERROR' in command_output.stdout"
