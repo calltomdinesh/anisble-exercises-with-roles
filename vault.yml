@@ -1,0 +1,24 @@
+# Ansible vaults are used to encrypt sensitive information
+# we can encrypt inventory.txt as below
+# ansible-vault encrypt inventory.txt
+# When we try to run the playbook as below
+# ansible-playbook playbook.yml -i inventory.txt we will get an error
+# not able to decrypt the inventory csvfile
+# for that we have to use as below
+# ansible-playbook playbook.yml -i inventory.txt -ask-vault-pass
+
+# Instead of prompting for the password, we can store the password
+# in a file and send file as vault-password-csvfile
+
+# ansible-playbook.yml playbook.yml -i inventory.txt -vault-password-file vault_pass.txt
+
+# Instead of passing the plain txt file, we can pass the script which retrieves other
+# password from a secured location
+
+# ansible-playbook.yml playbook.yml -i inventory.txt -vault-password-file vault_pass.py
+
+# to view the contents of encrypted file use:
+# ansible-vault view inventory.txt
+
+# to create a encrypted file use
+# ansible-vault create inventory.txt

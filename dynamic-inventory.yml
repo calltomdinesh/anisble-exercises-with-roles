@@ -1,0 +1,5 @@
+# Dynamic inventory is the inventory playbook retrieves programatcially
+# when ansible playbook is run from a database / cloud API
+# We change the inventory.txt file to a script
+
+#ansible-palybook playbook.yml -i inventory.py

@@ -1,0 +1,14 @@
+---
+ - hosts: all
+   become: yes
+   tasks:
+     - name: Install packages
+       yum:
+         name: "{{item}}"
+         state: present
+       # Recently with_items is replaced with loop.
+       with_items:
+         - httpd
+         - git
+         - docker
+         - telnet

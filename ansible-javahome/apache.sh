@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+    - name: Enable apache on reboot and start
+      service:
+        name: httpd
+        enabled: yes
+        state: started
+# Whenever index.html is changed handler is called.
+    - name: Deploy the project on apache
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+      notify:
+        - restart Apache
+
+  # Handler will run only when it is called/notified
+  handlers:
+    - name: restart Apache
+      service:
+        name: httpd
+        state: restarted
